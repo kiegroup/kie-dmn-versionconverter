@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dmn11:definitions xmlns="ns1" xmlns:drools="http://www.drools.org/kie/dmn/1.1" xmlns:feel="http://www.omg.org/spec/FEEL/20140401" xmlns:openapi="https://openapis.org/omg/extension/1.0" xmlns:rss="http://purl.org/rss/2.0/" xmlns:tc="http://www.omg.org/spec/DMN/20160719/testcase" xmlns:triso="http://www.trisotech.com/2015/triso/modeling" xmlns:trisodmn="http://www.trisotech.com/2016/triso/dmn" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Decision Modeler" exporterVersion="6.12.2" id="_c350b653-5450-4d72-ad83-849d01612cec" name="model1" namespace="ns1" triso:logoChoice="Default" xmlns:dmn11="http://www.omg.org/spec/DMN/20151101/dmn.xsd">
+  <dmn11:extensionElements>
+    <drools:decisionServices>
+      <dmn11:decisionService id="_253ef2e4-0683-4c39-b091-dde6c809b7b4" name="ds1">
+        <dmn11:description>&lt;p&gt;description of ds1&lt;/p&gt;</dmn11:description>
+        <dmn11:outputDecision href="#_9c62e325-4b64-43b3-969c-b7d174d98a8a"/>
+        <dmn11:inputData href="#_65318ea8-54e1-416d-b53a-14eae8405178"/>
+        <dmn11:inputData href="#_f1e475b0-6e6f-4463-960a-1faebeb2e7c0"/>
+      </dmn11:decisionService>
+    </drools:decisionServices>
+  </dmn11:extensionElements>
+  <dmn11:itemDefinition label="tPos" name="tPos">
+    <dmn11:typeRef>feel:number</dmn11:typeRef>
+    <dmn11:allowedValues triso:constraintsType="expression">
+      <dmn11:text>&gt;=0</dmn11:text>
+    </dmn11:allowedValues>
+  </dmn11:itemDefinition>
+  <dmn11:inputData id="_65318ea8-54e1-416d-b53a-14eae8405178" name="a text">
+    <dmn11:variable id="_93c84318-b1ce-42d0-ac80-e1f17c98c663" name="a text" typeRef="feel:string"/>
+  </dmn11:inputData>
+  <dmn11:inputData id="_f1e475b0-6e6f-4463-960a-1faebeb2e7c0" name="a number">
+    <dmn11:variable id="_3cedf2b0-2322-4525-9dda-ac6c2639f3f8" name="a number" typeRef="tPos"/>
+  </dmn11:inputData>
+  <dmn11:decision id="_9c62e325-4b64-43b3-969c-b7d174d98a8a" name="d1">
+    <dmn11:variable id="_d5244ab2-a325-498f-afcb-253c2cc838d3" name="d1" typeRef="feel:string"/>
+    <dmn11:informationRequirement>
+      <dmn11:requiredInput href="#_65318ea8-54e1-416d-b53a-14eae8405178"/>
+    </dmn11:informationRequirement>
+    <dmn11:informationRequirement>
+      <dmn11:requiredInput href="#_f1e475b0-6e6f-4463-960a-1faebeb2e7c0"/>
+    </dmn11:informationRequirement>
+    <dmn11:knowledgeRequirement>
+      <dmn11:requiredKnowledge href="#_0f56637e-9e4e-4f7d-a00c-196335a10988"/>
+    </dmn11:knowledgeRequirement>
+    <dmn11:invocation id="_894af15f-b5c3-4314-a9ef-0314ec7801d5" triso:expressionId="_a6503c5f-665e-4cc6-8100-bf6c573034d6">
+      <dmn11:literalExpression id="literal__894af15f-b5c3-4314-a9ef-0314ec7801d5">
+        <dmn11:text>bkm1</dmn11:text>
+      </dmn11:literalExpression>
+      <dmn11:binding>
+        <dmn11:parameter id="_b45934bb-c75e-47e8-bc5a-034b240f508a" name="p1"/>
+        <dmn11:literalExpression id="_0e5afd78-f102-48c7-a167-9a4af276417e">
+          <dmn11:text>a text</dmn11:text>
+        </dmn11:literalExpression>
+      </dmn11:binding>
+      <dmn11:binding>
+        <dmn11:parameter id="_9e97d325-b8a4-485e-97ab-328e0f9c9cb0" name="p2"/>
+        <dmn11:literalExpression id="_b31d3609-47ac-4fe2-a92f-7913fd123eb5">
+          <dmn11:text>a number</dmn11:text>
+        </dmn11:literalExpression>
+      </dmn11:binding>
+    </dmn11:invocation>
+  </dmn11:decision>
+  <dmn11:businessKnowledgeModel id="_0f56637e-9e4e-4f7d-a00c-196335a10988" name="bkm1">
+    <dmn11:description>&lt;p&gt;the bkm description&lt;/p&gt;</dmn11:description>
+    <dmn11:encapsulatedLogic drools:kind="F" id="_df8eb1c4-4dee-4149-a0c7-cddbe0532672" triso:expressionId="_a4dd1337-ab4b-4e2b-8e89-e06e93e391b7" typeRef="feel:string">
+      <dmn11:formalParameter id="_d6fb2f40-6d78-4230-9a71-a57017187c05" name="p1" typeRef="feel:string"/>
+      <dmn11:formalParameter id="_ec291d80-8226-40c2-b84f-3f29dbfa87a4" name="p2" typeRef="feel:number"/>
+      <dmn11:literalExpression id="_e677d9ab-5091-4dd5-ad41-b38cf6382083" typeRef="feel:string">
+        <dmn11:text>p1+string(p2)</dmn11:text>
+      </dmn11:literalExpression>
+    </dmn11:encapsulatedLogic>
+    <dmn11:variable id="_65dcccbc-4112-4aee-81d8-0811fcbdb181" name="bkm1" typeRef="feel:string"/> <!-- notice BKM's variable in this DMNv1.1 model is last -->
+  </dmn11:businessKnowledgeModel>
+</dmn11:definitions>
