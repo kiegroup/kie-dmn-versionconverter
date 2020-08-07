@@ -16,15 +16,10 @@
 package org.kie.dmn.versionconverter;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.drools.core.util.IoUtils;
 import org.junit.Test;
@@ -57,7 +52,7 @@ public class ConversionTest {
 
         File convertedFile = Files.createTempFile("kie-dmn-versionconverter", ".dmn").toFile();
         KieDMNVersionConverterMain.process(inputFile, convertedFile);
-        LOG.info("Output file written for bytes: {}", convertedFile.getName());
+        LOG.info("Output CONVERTED file written: {}", convertedFile.getName());
         LOG.debug("Converted file: \n{}", IoUtils.readFileAsString(convertedFile));
 
         List<DMNMessage> convertedValidation = validateModelFile(convertedFile);
