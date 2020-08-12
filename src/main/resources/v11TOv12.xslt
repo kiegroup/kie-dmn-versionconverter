@@ -102,7 +102,7 @@ xmlns:drools="http://www.drools.org/kie/dmn/1.1"
       <!-- the above can only be a valid relative path IFF we are the 'definitions' element, we make a copy here of the DS elements in the new ns -->
       <xsl:variable name="dsname"><xsl:value-of select="@name"/></xsl:variable>
       <xsl:element name="semantic:decisionService" namespace="http://www.omg.org/spec/DMN/20180521/MODEL/" >
-        <xsl:apply-templates select="@*"/>
+        <xsl:apply-templates select="@*[not(local-name()='expressionLanguage' and .='http://www.omg.org/spec/FEEL/20140401')]"/>
         <xsl:apply-templates select="old:description"/>
         <xsl:apply-templates select="old:extensionElements"/>
         <xsl:element name="semantic:variable" namespace="http://www.omg.org/spec/DMN/20180521/MODEL/" >
