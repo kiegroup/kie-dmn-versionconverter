@@ -87,7 +87,7 @@ xmlns:drools="http://www.drools.org/kie/dmn/1.1"
       </xsl:choose>    
     </xsl:for-each>
    
-    <xsl:apply-templates select="@*"/>
+    <xsl:apply-templates select="@*[not(local-name()='expressionLanguage' and .='http://www.omg.org/spec/FEEL/20140401')]"/>
     <xsl:apply-templates select="old:description"/>
     <xsl:apply-templates select="old:extensionElements"/>
     <xsl:if test="local-name()='businessKnowledgeModel'"> <!--need copy BKM variable as first element -->

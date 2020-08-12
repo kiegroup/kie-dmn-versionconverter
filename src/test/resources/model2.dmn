@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dmn11:definitions xmlns="http://www.trisotech.com/definitions/_8c871637-7aa0-4026-bb34-161ef3cff6ed" xmlns:drools="http://www.drools.org/kie/dmn/1.1" xmlns:feel="http://www.omg.org/spec/FEEL/20140401" xmlns:openapi="https://openapis.org/omg/extension/1.0" xmlns:rss="http://purl.org/rss/2.0/" xmlns:tc="http://www.omg.org/spec/DMN/20160719/testcase" xmlns:triso="http://www.trisotech.com/2015/triso/modeling" xmlns:trisodmn="http://www.trisotech.com/2016/triso/dmn" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Decision Modeler" exporterVersion="6.12.2" id="_8c871637-7aa0-4026-bb34-161ef3cff6ed" name="Drawing 1" namespace="http://www.trisotech.com/definitions/_8c871637-7aa0-4026-bb34-161ef3cff6ed" triso:logoChoice="Default" xmlns:dmn11="http://www.omg.org/spec/DMN/20151101/dmn.xsd">
+  <dmn11:extensionElements/>
+  <dmn11:decision id="_8be39528-4244-4817-940f-eb49c5a9b8ef" name="a decision">
+    <dmn11:variable id="_688a5b46-223a-44ba-8a02-f8169f9b7f6b" name="a decision" typeRef="feel:string"/>
+    <dmn11:literalExpression expressionLanguage="http://www.omg.org/spec/FEEL/20140401" id="_13b2eba6-4dbe-432a-a9ff-c91cf935fe2e" triso:expressionId="_5e82134a-926e-4118-8260-56d48a874da5" triso:unparsed="true" typeRef="feel:string">
+      <dmn11:text>"Hello, World!"</dmn11:text>
+    </dmn11:literalExpression>
+  </dmn11:decision>
+</dmn11:definitions>

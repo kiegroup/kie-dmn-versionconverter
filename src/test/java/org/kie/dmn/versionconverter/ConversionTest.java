@@ -31,6 +31,8 @@ import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
+import org.kie.dmn.model.api.Decision;
+import org.kie.dmn.model.api.LiteralExpression;
 import org.kie.dmn.validation.DMNValidator;
 import org.kie.dmn.validation.DMNValidatorFactory;
 import org.kie.internal.io.ResourceFactory;
@@ -61,7 +63,8 @@ public class ConversionTest {
         assertThat(convertedValidation).noneMatch(m -> m.getLevel() == Level.ERROR);
 
         List<Resource> asList = Arrays.asList(ResourceFactory.newFileResource(convertedFile));
-        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(asList).getOrElseThrow(RuntimeException::new);
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(asList)
+                .getOrElseThrow(RuntimeException::new);
         DMNModel dmnModel = dmnRuntime.getModel("ns1", "model1");
         DMNContext dmnContext = dmnRuntime.newContext();
         dmnContext.set("a text", "asd");
@@ -69,18 +72,53 @@ public class ConversionTest {
         DMNResult evaluateAll = dmnRuntime.evaluateAll(dmnModel, dmnContext);
         LOG.info("{}", evaluateAll);
         assertThat(evaluateAll.hasErrors()).isFalse();
-        assertThat(evaluateAll.getDecisionResultByName("d1").getResult()).asInstanceOf(InstanceOfAssertFactories.STRING).isEqualTo("asd47");
+        assertThat(evaluateAll.getDecisionResultByName("d1").getResult()).asInstanceOf(InstanceOfAssertFactories.STRING)
+                .isEqualTo("asd47");
 
         DMNResult evaluateDecisionService = dmnRuntime.evaluateDecisionService(dmnModel, dmnContext, "ds1");
         LOG.info("{}", evaluateDecisionService);
         assertThat(evaluateDecisionService.hasErrors()).isFalse();
-        assertThat(evaluateDecisionService.getDecisionResultByName("d1").getResult()).asInstanceOf(InstanceOfAssertFactories.STRING).isEqualTo("asd47");
+        assertThat(evaluateDecisionService.getDecisionResultByName("d1").getResult())
+                .asInstanceOf(InstanceOfAssertFactories.STRING).isEqualTo("asd47");
     }
 
     private List<DMNMessage> validateModelFile(File inputFile) {
         return DMNValidatorFactory.newValidator()
                 .validateUsing(DMNValidator.Validation.VALIDATE_SCHEMA, DMNValidator.Validation.VALIDATE_MODEL)
                 .theseModels(inputFile);
+    }
+
+    @Test
+    public void test_feelUnparsed() throws Exception {
+        File inputFile = new File(this.getClass().getResource("/model2.dmn").toURI());
+        List<DMNMessage> modelValidation = validateModelFile(inputFile);
+        LOG.info("Total of validation messages: {}", modelValidation.size());
+        modelValidation.forEach(m -> LOG.info("{}", m));
+        assertThat(modelValidation).noneMatch(m -> m.getLevel() == Level.ERROR);
+
+        File convertedFile = Files.createTempFile("kie-dmn-versionconverter", ".dmn").toFile();
+        KieDMNVersionConverterMain.process(inputFile, convertedFile);
+        LOG.info("Output CONVERTED file written: {}", convertedFile.getName());
+        LOG.debug("Converted file: \n{}", IoUtils.readFileAsString(convertedFile));
+
+        List<DMNMessage> convertedValidation = validateModelFile(convertedFile);
+        LOG.info("Total of CONVERTED validation messages: {}", convertedValidation.size());
+        convertedValidation.forEach(m -> LOG.info("{}", m));
+        assertThat(convertedValidation).noneMatch(m -> m.getLevel() == Level.ERROR);
+
+        List<Resource> asList = Arrays.asList(ResourceFactory.newFileResource(convertedFile));
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(asList)
+                .getOrElseThrow(RuntimeException::new);
+        DMNModel dmnModel = dmnRuntime
+                .getModel("http://www.trisotech.com/definitions/_8c871637-7aa0-4026-bb34-161ef3cff6ed", "Drawing 1");
+        DMNContext dmnContext = dmnRuntime.newContext();
+        DMNResult evaluateAll = dmnRuntime.evaluateAll(dmnModel, dmnContext);
+        LOG.info("{}", evaluateAll);
+        assertThat(evaluateAll.hasErrors()).isFalse();
+        assertThat(evaluateAll.getDecisionResultByName("a decision").getResult())
+                .asInstanceOf(InstanceOfAssertFactories.STRING).isEqualTo("Hello, World!");
+        assertThat(((LiteralExpression) ((Decision) dmnModel.getDefinitions().getDrgElement().get(0)).getExpression())
+                .getExpressionLanguage()).isNull();
     }
 
 }
