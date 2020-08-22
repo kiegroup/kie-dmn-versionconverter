@@ -1,0 +1,23 @@
+CLI Utility to update from DMN version 1.1 to DMN version 1.2
+
+== Example usage
+
+Install the project locally:
+----
+mvn clean install
+----
+
+Make a convenience alias in the open terminal window:
+----
+alias tmp="java -jar ~/.m2/repository/org/kie/kie-dmn-versionconverter/1.0.0-SNAPSHOT/kie-dmn-versionconverter-1.0.0-SNAPSHOT.jar --overwrite --input "
+----
+
+So the convenience alias could be used to convert a specific file with:
+----
+tmp <filename>
+----
+
+To identify files which need conversion, can use:
+----
+grep --include=\*.dmn -rlw . -e "http://www.omg.org/spec/DMN/20151101/dmn.xsd"
+----
