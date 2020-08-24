@@ -97,6 +97,10 @@ xmlns:drools="http://www.drools.org/kie/dmn/1.1"
         </xsl:element>
       </xsl:for-each>
     </xsl:if>
+    <xsl:if test="local-name()='import'"> <!--the Import has a name attribute on DMNv1.2 -->
+      <xsl:variable name="importname"><xsl:value-of select="@drools:name"/></xsl:variable>
+      <xsl:attribute name="name"><xsl:value-of select="$importname"/></xsl:attribute>
+    </xsl:if>
     <xsl:apply-templates select="node()[not(local-name()='description' or local-name()='extensionElements')]"/>
     <xsl:for-each select="old:extensionElements/drools:decisionServices/old:decisionService">
       <!-- the above can only be a valid relative path IFF we are the 'definitions' element, we make a copy here of the DS elements in the new ns -->

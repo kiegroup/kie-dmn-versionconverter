@@ -16,9 +16,11 @@
 package org.kie.dmn.versionconverter;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.drools.core.util.IoUtils;
@@ -82,7 +84,7 @@ public class ConversionTest {
                 .asInstanceOf(InstanceOfAssertFactories.STRING).isEqualTo("asd47");
     }
 
-    private List<DMNMessage> validateModelFile(File inputFile) {
+    private List<DMNMessage> validateModelFile(File... inputFile) {
         return DMNValidatorFactory.newValidator()
                 .validateUsing(DMNValidator.Validation.VALIDATE_SCHEMA, DMNValidator.Validation.VALIDATE_MODEL)
                 .theseModels(inputFile);
@@ -119,6 +121,36 @@ public class ConversionTest {
                 .asInstanceOf(InstanceOfAssertFactories.STRING).isEqualTo("Hello, World!");
         assertThat(((LiteralExpression) ((Decision) dmnModel.getDefinitions().getDrgElement().get(0)).getExpression())
                 .getExpressionLanguage()).isNull();
+    }
+
+    @Test
+    public void test_ImportName() throws Exception {
+        File importedModelFile = new File(this.getClass().getResource("/Imported_Model.dmn").toURI());
+        File inputFile = new File(this.getClass().getResource("/Importing_Model.dmn").toURI());
+
+        File convertedFile = Files.createTempFile("kie-dmn-versionconverter", ".dmn").toFile();
+        KieDMNVersionConverterMain.process(inputFile, convertedFile);
+        LOG.info("Output CONVERTED file written: {}", convertedFile.getAbsolutePath());
+        LOG.debug("Converted file: \n{}", IoUtils.readFileAsString(convertedFile));
+
+        List<DMNMessage> convertedValidation = validateModelFile(importedModelFile, convertedFile);
+        LOG.info("Total of CONVERTED validation messages: {}", convertedValidation.size());
+        convertedValidation.forEach(m -> LOG.info("{}", m));
+        assertThat(convertedValidation).noneMatch(m -> m.getLevel() == Level.ERROR);
+
+        List<Resource> asList = Arrays.asList(ResourceFactory.newFileResource(importedModelFile), ResourceFactory.newFileResource(convertedFile));
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(asList)
+                .getOrElseThrow(RuntimeException::new);
+        DMNModel dmnModel = dmnRuntime
+                .getModel("http://www.trisotech.com/dmn/definitions/_f79aa7a4-f9a3-410a-ac95-bea496edab52", "Importing Model");
+        DMNContext dmnContext = dmnRuntime.newContext();
+        dmnContext.set("A Person", Map.of("age", new BigDecimal(47), 
+                                               "name", "John"));
+        DMNResult evaluateAll = dmnRuntime.evaluateAll(dmnModel, dmnContext);
+        LOG.info("{}", evaluateAll);
+        assertThat(evaluateAll.hasErrors()).isFalse();
+        assertThat(evaluateAll.getDecisionResultByName("Greeting").getResult())
+                .asInstanceOf(InstanceOfAssertFactories.STRING).isEqualTo("Hello John!");
     }
 
 }
