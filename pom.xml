@@ -63,29 +63,6 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.8</version>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <configuration>
-              <tasks>
-                <get src="https://github.com/Saxonica/Saxon-CE/raw/master/releases/1.1/Saxon-CE_1.1.zip" dest="${project.build.directory}" verbose="true" usetimestamp="true" />
-                <echo message="unzipping library: Saxon CE binary" />
-                <unzip src="${project.build.directory}/Saxon-CE_1.1.zip" dest="dist/">
-                  <patternset>
-                    <include name="Saxonce/**" />
-                  </patternset>
-                </unzip>
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>

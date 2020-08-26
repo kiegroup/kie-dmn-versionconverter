@@ -4,4 +4,3 @@ Licensed under the Apache License, Version 2.0
 
 This software bundles third party projects which are licensed under "Mozilla Public License 2.0"
 net.sf.saxon:Saxon-HE https://mvnrepository.com/artifact/net.sf.saxon/Saxon-HE
-Saxon-CE https://github.com/Saxonica/Saxon-CE/blob/master/notices/README.txt
